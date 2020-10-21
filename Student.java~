@@ -1,0 +1,23 @@
+public class Student {
+
+    private int id;
+    private int[] prefList;
+    
+    public Student(int id, int[] prefList) {
+	this.id = id;
+	this.prefList = prefList;
+    }
+    public getPrefList() {
+	return prefList;
+    }
+    public String toString() {
+	String s =  i + ": ";
+	for(int i = 0; i < 4; i++) {
+	    s += prefList[i] + " ";
+	}
+	return s;
+    }
+    
+    
+
+}

@@ -1,0 +1,13 @@
+public class Classes {
+    private int id;
+    private int popularity;
+    
+    public Classes(int id) {
+	this.id = id;
+	this.popularity = 0;
+    }
+    public void incPopularity() {
+	popularity += 1;
+    }
+    
+}
