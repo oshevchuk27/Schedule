@@ -5,6 +5,8 @@ public class Schedule {
     
     static int numClasses;
     static int numTimeslots;
+    static int numRooms;
+    
     static Classes[] classes;
     static Room[] rooms;
     static Student[] students;
@@ -14,6 +16,7 @@ public class Schedule {
 	readConstraints("demo_constraints.txt");
 	readPreferences("demo_studentprefs.txt");
 	setTimes();
+	makeSchedule();
 	
     }
     public static void readConstraints(String filename) throws FileNotFoundException {
@@ -27,7 +30,7 @@ public class Schedule {
 	while(!constraints.hasNextInt()) {
 	    constraints.next();
 	}
-	int numRooms = constraints.nextInt();
+	numRooms = constraints.nextInt();
 	System.out.println("rooms: " + numRooms);
 
 	
@@ -38,18 +41,10 @@ public class Schedule {
 	    constraints.nextInt();
 	    size = constraints.nextInt();
 	    rooms[i] = new Room(i, size);
-	    
 	}
-	
-	for(int i = 1; i <= numRooms; i++) {
-	    System.out.println(rooms[i]);
-	}
-	
+
+	//sort list from largest to smallest room
 	Arrays.sort(rooms, Collections.reverseOrder());
-	
-	for(int i = 1; i <= numRooms; i++) {
-	    System.out.println(rooms[i]);
-	}
 
 	while(!constraints.hasNextInt()) {
 	    constraints.next();
@@ -74,6 +69,8 @@ public class Schedule {
 	int professor;
 	Classes c;
 	Professor p;
+
+	//set professors to classes
 	for(int i = 1; i <=  numClasses; i++) {
 	    constraints.nextInt();
 	    professor = constraints.nextInt();
@@ -82,11 +79,7 @@ public class Schedule {
 	    c.setProfessor(p);
 	    classes[i] = c;
 	    professors[professor] = p;
-	}
-	
-	for(int i = 1; i <= numClasses; i++) {
-	    System.out.println(classes[i]);
-	}	    
+	} 
     }
 
     public static void readPreferences(String filename) throws FileNotFoundException {
@@ -99,57 +92,103 @@ public class Schedule {
 	students = new Student[numStudents + 1];
 	students[0] = new Student(0,null);
 
-
 	Classes c;
 	
 	for(int i = 1; i <= numStudents; i++) {
 	    Classes[] prefList = new Classes[4];
 	    preferences.nextInt();
+
+	    //count popularity of classes
 	    for(int j = 0; j < 4; j++) {
 		c = classes[preferences.nextInt()];
-		//prefList[j] = preferences.nextInt();
 		prefList[j] = c;
-		//classes[prefList[j]].incPopularity();
 		classes[c.getID()].incPopularity();
 	    }
+	    //save students' preference lists
 	    students[i] = new Student(i, prefList);
 	}
 
-	for(int i = 1; i <= numStudents; i++) {
-	    System.out.println(students[i]);
-	}
-
+	//sort classes most to least popular
 	Arrays.sort(classes, Collections.reverseOrder());
+    }
 
-	for(int i = 0; i < numClasses; i++) {
-	    System.out.println(classes[i]);
+    //set rooms' and professors' available timeslots to all timeslots
+    public static void setTimes() {
+
+	int[] timeslots;
+	
+	for(Room room : rooms) {
+	    timeslots = new int[numTimeslots + 1];
+	    for(int i = 0; i <= numTimeslots; i++) {
+		timeslots[i] = i;
+	    }
+	    room.setAvailableTimes(timeslots);
+	}
+	
+	for(Professor professor : professors) {
+	    timeslots = new int[numTimeslots + 1];
+	    for(int i = 0; i <= numTimeslots; i++) {
+		timeslots[i] = i;
+	    }
+	    professor.setAvailableTimes(timeslots);
 	}
     }
 
-    public static void setTimes() {
-	int[] timeslots = new int[numTimeslots + 1];
-	//need to fix so each professor has their own list
-	LinkedList<Integer> ts = new LinkedList<Integer>();
-	timeslots[0] = 0;
+    public static boolean scheduleClass(Classes c, Room r) {
+	Professor p = c.getProfessor();
+	int[] roomTimeslots = r.getAvailableTimes();
+	boolean available;
+	int t;
+	//for(int t : roomTimeslots) {
 	for(int i = 1; i <= numTimeslots; i++) {
-	    timeslots[i] = i;
-	    ts.add(i);
+	    //find available timeslot for room
+	    t = roomTimeslots[i];
+	    if(!r.available(t)) {
+		continue;
+	    }
+	    //check if professor is available at this time
+	    available = p.available(t);
+	    System.out.println(available);
+	    
+	    if(available) {
+		System.out.println(c);
+		p.printAvailableTimes();
+		r.removeTime(t);
+		p.removeTime(t);
+		c.setTime(t);
+		c.setRoom(r);
+		//if there are no more available slots, remove room from list
+		if(r.getNumRemoved() == numTimeslots) {
+		    rooms[r.getID()] = null;
+		}
+	
+		return true;
+	    }
 	}
-	for(Room room : rooms) {
-	    room.setAvailableTimes(timeslots);
+	System.out.println("sad");
+	return false;
+    }
+    
+    public static void makeSchedule() {
+	boolean success;
+	Room r;
+	Classes c;
+	int roomID;
+	
+	//for(Classes c : classes) {
+	for(int i = 1; i <= numClasses; i++) {
+	    c = classes[i];
+	    r = rooms[1];
+	    success = false;
+	    while(!success && r.getID() <= numRooms) {
+		success = scheduleClass(c, r);
+		//try next room
+		if(!success) {
+		    roomID = r.getID();
+		    System.out.println(roomID+1);
+		    r = rooms[roomID + 1];
+		}
+	    }
 	}
-	for(Professor professor : professors) {
-	    //professor.setAvailableTimes(timeslots);
-	    professor.setAvailableTimes(ts);
-	}
-	for(int i = 1; i < professors.length; i++) {
-	    System.out.println(professors[i]);
-	}
-	System.out.println(professors[4]);
-	professors[4].removeTime(2);
-	for(int i = 1; i < professors.length; i++) {
-	    System.out.println(professors[i]);
-	}
-
     }
 }

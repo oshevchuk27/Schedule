@@ -35,6 +35,14 @@ public class Classes implements Comparable<Classes>{
 	return popularity;
     }
 
+    public void setTime(int timeslot) {
+	this.timeslot = timeslot;
+    }
+
+    public void setRoom(Room room) {
+	this.room = room;
+    }
+    
     public void enrollStudent(Student s) {
 	enrolledStudents.add(s);
     }
