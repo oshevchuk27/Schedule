@@ -64,7 +64,7 @@ public class Schedule {
 	}
 	System.out.println("professors: " + numProfessors);
 	professors = new Professor[numProfessors + 1];
-	professors[0] = new Professor(0);
+	professors[0] = new Professor(0,0);
 
 	int professor;
 	Classes c;
@@ -75,7 +75,7 @@ public class Schedule {
 	    constraints.nextInt();
 	    professor = constraints.nextInt();
 	    c = new Classes(i);
-	    p = new Professor(professor);
+	    p = new Professor(professor,numTimeslots);
 	    c.setProfessor(p);
 	    classes[i] = c;
 	    professors[professor] = p;
@@ -132,34 +132,54 @@ public class Schedule {
 	    }
 	    professor.setAvailableTimes(timeslots);
 	}
+	/*for(int i = 1; i < professors.length; i++) {
+	    System.out.println(i);
+	    professors[i].printAvailableTimes();
+	    System.out.println();
+	}
+	professors[2].removeTime(3);
+	professors[1].removeTime(2);
+	for(int i = 1; i < professors.length; i++) {
+	    System.out.println(i);
+	    professors[i].printAvailableTimes();
+	    System.out.println();
+	    }*/
     }
 
     public static boolean scheduleClass(Classes c, Room r) {
+	
 	Professor p = c.getProfessor();
 	int[] roomTimeslots = r.getAvailableTimes();
 	boolean available;
 	int t;
 	//for(int t : roomTimeslots) {
 	for(int i = 1; i <= numTimeslots; i++) {
+	   
 	    //find available timeslot for room
 	    t = roomTimeslots[i];
-	    if(!r.available(t)) {
+	    if(!r.available(i)) {
 		continue;
 	    }
+	    //System.out.println("class1 " + c);
+	     //professors[3].printAvailableTimes();
+	     //System.out.println(" b " + professors[3].getAvailableTimes());
 	    //check if professor is available at this time
 	    available = p.available(t);
-	    System.out.println(available);
+	    //System.out.println(available);
+	    //System.out.println("class2 " + c);
+	       //professors[3].printAvailableTimes();
 	    
 	    if(available) {
-		System.out.println(c);
-		p.printAvailableTimes();
+		//System.out.println(c);
+		//p.printAvailableTimes();
 		r.removeTime(t);
 		p.removeTime(t);
 		c.setTime(t);
 		c.setRoom(r);
 		//if there are no more available slots, remove room from list
 		if(r.getNumRemoved() == numTimeslots) {
-		    rooms[r.getID()] = null;
+		    //rooms[r.getID()] = null;
+		    r.setUnavailable();
 		}
 	
 		return true;
@@ -170,6 +190,9 @@ public class Schedule {
     }
     
     public static void makeSchedule() {
+	for(int i = 0; i < rooms.length; i++) {
+	    System.out.print(rooms[i] + ", ");
+	}
 	boolean success;
 	Room r;
 	Classes c;
@@ -178,16 +201,30 @@ public class Schedule {
 	//for(Classes c : classes) {
 	for(int i = 1; i <= numClasses; i++) {
 	    c = classes[i];
-	    r = rooms[1];
+	    r = rooms[0];
 	    success = false;
-	    while(!success && r.getID() <= numRooms) {
-		success = scheduleClass(c, r);
-		//try next room
-		if(!success) {
-		    roomID = r.getID();
-		    System.out.println(roomID+1);
-		    r = rooms[roomID + 1];
+	    int j = 0;
+	    // while(!success && r.getID() <= numRooms) {
+	    while(!success && j <= numRooms) {
+		j = 0;
+		r = rooms[j];
+		while(!r.hasAvailableTimeslots()){
+		    j++;
+		    r = rooms[j];
 		}
+		System.out.println("j " + j);
+		System.out.println("id " + r.getID());
+		success = scheduleClass(c, r);
+		System.out.println(success);
+		//try next room
+		//if(!success) {
+		//  roomID = r.getID();
+		    //System.out.println(roomID+1);
+		//  r = rooms[roomID + 1];
+		    //System.out.println("here");
+		//  }
+		    //System.out.println("room " + r);
+		    //System.out.println("index " + 
 	    }
 	}
     }

@@ -4,11 +4,13 @@ public class Room implements Comparable<Room>{
     private int size;
     private int[] availableTimes;
     private int numRemoved;
+    private boolean unavailable;
     
     public Room(int id, int size)  {
 	this.id = id;
 	this.size = size;
 	this.numRemoved = 0;
+	this.unavailable = false;
     }
     public int getSize() {
 	return size;
@@ -36,6 +38,14 @@ public class Room implements Comparable<Room>{
 
     public boolean available(int time) {
 	return availableTimes[time] != -1;
+    }
+
+    public void setUnavailable() {
+	this.unavailable = true;
+    }
+
+    public boolean hasAvailableTimeslots() {
+	return !unavailable;
     }
     
     public String toString() {
