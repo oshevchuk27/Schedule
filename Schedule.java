@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*;
 
 public class Schedule {
+
+    static int currentLargestRoom = 0;
     
     static int numClasses;
     static int numTimeslots;
@@ -17,6 +19,13 @@ public class Schedule {
 	readPreferences("demo_studentprefs.txt");
 	setTimes();
 	makeSchedule();
+	for(int i = 0; i < classes.length; i++) {
+	    //System.out.println(classes[i]);
+	}
+	for(int i = 0; i< professors.length;i++) {
+	    // professors[i].printAvailableTimes();
+	}
+	
 	
     }
     public static void readConstraints(String filename) throws FileNotFoundException {
@@ -64,7 +73,7 @@ public class Schedule {
 	}
 	System.out.println("professors: " + numProfessors);
 	professors = new Professor[numProfessors + 1];
-	professors[0] = new Professor(0,0);
+	professors[0] = new Professor(0,numTimeslots);
 
 	int professor;
 	Classes c;
@@ -127,10 +136,13 @@ public class Schedule {
 	
 	for(Professor professor : professors) {
 	    timeslots = new int[numTimeslots + 1];
+	    int[] ts = professor.getAvailableTimes();
+	    //System.out.println(ts.length);
 	    for(int i = 0; i <= numTimeslots; i++) {
 		timeslots[i] = i;
+		ts[i] = i;
 	    }
-	    professor.setAvailableTimes(timeslots);
+	    //professor.setAvailableTimes(timeslots);
 	}
 	/*for(int i = 1; i < professors.length; i++) {
 	    System.out.println(i);
@@ -164,6 +176,8 @@ public class Schedule {
 	     //professors[3].printAvailableTimes();
 	     //System.out.println(" b " + professors[3].getAvailableTimes());
 	    //check if professor is available at this time
+	    
+	    //System.out.println("c " + c);
 	    available = p.available(t);
 	    //System.out.println(available);
 	    //System.out.println("class2 " + c);
@@ -174,12 +188,16 @@ public class Schedule {
 		//p.printAvailableTimes();
 		r.removeTime(t);
 		p.removeTime(t);
+		//System.out.println("p " + p);
+		//p.printAvailableTimes();
 		c.setTime(t);
 		c.setRoom(r);
 		//if there are no more available slots, remove room from list
 		if(r.getNumRemoved() == numTimeslots) {
 		    //rooms[r.getID()] = null;
+		    //change index of max instead
 		    r.setUnavailable();
+		    currentLargestRoom++;
 		}
 	
 		return true;
@@ -190,39 +208,48 @@ public class Schedule {
     }
     
     public static void makeSchedule() {
-	for(int i = 0; i < rooms.length; i++) {
-	    System.out.print(rooms[i] + ", ");
-	}
+	//for(int i = 0; i < rooms.length; i++) {
+	//System.out.print(rooms[i] + ", ");
+	//}
+	
 	boolean success;
 	Room r;
 	Classes c;
 	int roomID;
+	int nextRoom;
 	
 	//for(Classes c : classes) {
-	for(int i = 1; i <= numClasses; i++) {
+	for(int i = 0; i < numClasses; i++) {
 	    c = classes[i];
 	    r = rooms[0];
 	    success = false;
-	    int j = 0;
+	    //int j = 0;
+	    nextRoom = currentLargestRoom;
+	    r = rooms[currentLargestRoom];
 	    // while(!success && r.getID() <= numRooms) {
-	    while(!success && j <= numRooms) {
-		j = 0;
-		r = rooms[j];
-		while(!r.hasAvailableTimeslots()){
+	    while(!success && r.getID() != 0) {
+		//j = 0;
+		
+		//r = rooms[j];
+		
+		//keep track of index of max room instead
+		/*while(!r.hasAvailableTimeslots()){
 		    j++;
 		    r = rooms[j];
 		}
 		System.out.println("j " + j);
-		System.out.println("id " + r.getID());
+		System.out.println("id " + r.getID());*/
 		success = scheduleClass(c, r);
-		System.out.println(success);
+		//System.out.println(success);
 		//try next room
-		//if(!success) {
+		if(!success) {
+		    nextRoom++;
+		    r = rooms[nextRoom];
 		//  roomID = r.getID();
 		    //System.out.println(roomID+1);
 		//  r = rooms[roomID + 1];
 		    //System.out.println("here");
-		//  }
+		  }
 		    //System.out.println("room " + r);
 		    //System.out.println("index " + 
 	    }

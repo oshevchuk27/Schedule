@@ -52,7 +52,7 @@ public class Classes implements Comparable<Classes>{
     }
     
     public String toString() {
-	return id + ": pop: " + popularity + ", prof: " + professor;
+	return id + ": pop: " + popularity + ", prof: " + professor + ", room:" + room + ",time: " + timeslot;
     }
     
     public int compareTo(Classes other) {

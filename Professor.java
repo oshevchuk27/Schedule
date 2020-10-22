@@ -8,6 +8,7 @@ public class Professor {
 
     public Professor(int id, int numTimes) {
 	this.id = id;
+	//System.out.println(numTimes);
 	this.availableTimes = new int[numTimes+1];
 	//availableTimes = new LinkedList<Integer>();
     }
@@ -24,6 +25,7 @@ public class Professor {
 	for(int i = 1; i < availableTimes.length; i++) {
 	    System.out.print(availableTimes[i] + ", ");
 	}
+	System.out.println();
     }
 
     public void removeTime(int time) {
@@ -39,6 +41,9 @@ public class Professor {
     public boolean available(int time) {
 	//System.out.println("id " + id + " time " + time);
 	//System.out.println("s " + availableTimes);
+	//System.out.println("id " + id);
+	//System.out.println("time " + time);
+	//System.out.println(availableTimes[time]);
 	return availableTimes[time] != -1;
     }
     
