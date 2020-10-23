@@ -19,20 +19,10 @@ public class Schedule {
 	readPreferences("demo_studentprefs.txt");
 	setTimes();
 	makeSchedule();
-	for(int i = 0; i < classes.length; i++) {
-	    System.out.println(classes[i]);
-	}
-	for(int i = 0; i< professors.length;i++) {
-	    // professors[i].printAvailableTimes();
-	}
 	scheduleStudents();
-	for(int i = 0; i < students.length; i ++) {
-	    System.out.println(students[i]);
-	}
 	writeScheduleFile();
-	
-	
     }
+    
     public static void readConstraints(String filename) throws FileNotFoundException {
 	Scanner constraints = new Scanner(new File(filename));
 	while(!constraints.hasNextInt()) {
@@ -154,18 +144,6 @@ public class Schedule {
 	    }
 	    professor.setAvailableTimes(timeslots);
 	}
-	/*for(int i = 1; i < professors.length; i++) {
-	    System.out.println(i);
-	    professors[i].printAvailableTimes();
-	    System.out.println();
-	}
-	professors[2].removeTime(3);
-	professors[1].removeTime(2);
-	for(int i = 1; i < professors.length; i++) {
-	    System.out.println(i);
-	    professors[i].printAvailableTimes();
-	    System.out.println();
-	    }*/
     }
 
     public static boolean scheduleClass(Classes c, Room r) {
@@ -174,7 +152,7 @@ public class Schedule {
 	int[] roomTimeslots = r.getAvailableTimes();
 	boolean available;
 	int t;
-	//for(int t : roomTimeslots) {
+
 	for(int i = 1; i <= numTimeslots; i++) {
 	   
 	    //find available timeslot for room
@@ -182,48 +160,31 @@ public class Schedule {
 	    if(!r.available(i)) {
 		continue;
 	    }
-	    //System.out.println("class1 " + c);
-	     //professors[3].printAvailableTimes();
-	     //System.out.println(" b " + professors[3].getAvailableTimes());
-	    //check if professor is available at this time
-	    
-	    //System.out.println("c " + c);
-	    if(p.getID()==2) {
-		//p.printAvailableTimes();
-	    }
+
+	    //check if professor is available during this time
 	    available = p.available(t);
-	    //System.out.println(available);
-	    //System.out.println("class2 " + c);
-	       //professors[3].printAvailableTimes();
 	    
 	    if(available) {
-		//System.out.println(c);
-		//p.printAvailableTimes();
+
+		//remove time from professor and room's available times
 		r.removeTime(t);
 		p.removeTime(t);
-		//System.out.println("p " + p);
-		//p.printAvailableTimes();
+
+		//set time and room for class
 		c.setTime(t);
 		c.setRoom(r);
+		
 		//if there are no more available slots, remove room from list
 		if(r.getNumRemoved() == numTimeslots) {
-		    //rooms[r.getID()] = null;
-		    //change index of max instead
-		    r.setUnavailable();
 		    currentLargestRoom++;
 		}
-	
 		return true;
 	    }
 	}
-	System.out.println("sad");
 	return false;
     }
     
     public static void makeSchedule() {
-	//for(int i = 0; i < rooms.length; i++) {
-	//System.out.print(rooms[i] + ", ");
-	//}
 	
 	boolean success;
 	Room r;
@@ -231,46 +192,44 @@ public class Schedule {
 	int roomID;
 	int nextRoom;
 	
-	//for(Classes c : classes) {
 	for(int i = 0; i < numClasses; i++) {
+	    
 	    c = classes[i];
-	    r = rooms[0];
 	    success = false;
-	    //int j = 0;
 	    nextRoom = currentLargestRoom;
 	    r = rooms[currentLargestRoom];
-	    // while(!success && r.getID() <= numRooms) {
+
+	    //while class is not schedule or we reach the end of the list
 	    while(!success && r.getID() != 0) {
-		//j = 0;
-		
-		//r = rooms[j];
-		
-		//keep track of index of max room instead
-		/*while(!r.hasAvailableTimeslots()){
-		    j++;
-		    r = rooms[j];
-		}
-		System.out.println("j " + j);
-		System.out.println("id " + r.getID());*/
+
 		success = scheduleClass(c, r);
-		//System.out.println(success);
+
 		//try next room
 		if(!success) {
 		    nextRoom++;
 		    r = rooms[nextRoom];
-		  }
+		}
 	    }
 	}
     }
+    
     public static void scheduleStudents() {
+	
 	Student s;
 	Classes[] prefList;
 	Classes c;
+
 	for(int i = 1; i < students.length; i++) {
+	    
 	    s = students[i];
 	    prefList = s.getPrefList();
+
+	    //traverse student's preference list
 	    for(int j = 0; j<prefList.length; j++) {
+
 		c = prefList[j];
+
+		//enroll them in class if it is not full and it doesn't conflict with their other classes
 		if(!c.isFull()) {
 		    if(s.available(c.getTime())) {
 			s.enroll(c);
@@ -281,10 +240,16 @@ public class Schedule {
 	}
     }
 
-    public static void writeScheduleFile() {
-	System.out.println("Course \t Room \t Teacher \t Time \t Students";
-	/*PrintWriter writer = new PrintWriter("schedule.txt");
-	writer.println("Course \t ");
-	writer.close();*/
+    public static void writeScheduleFile() throws FileNotFoundException {
+	System.out.println("Course	Room	Teacher	Time	Students");
+	for(int i = 0; i < classes.length-1; i++) {
+	    System.out.println(classes[i]);
+	}
+	PrintWriter writer = new PrintWriter("schedule.txt");
+	writer.println("Course	Room	Teacher	Time	Students");
+	for(int i = 0; i < classes.length-1; i++) {
+	    writer.println(classes[i]);
+	}
+	writer.close();
     }
 }

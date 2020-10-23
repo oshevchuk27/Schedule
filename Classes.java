@@ -12,7 +12,7 @@ public class Classes implements Comparable<Classes>{
     public Classes(int id) {
 	this.id = id;
 	this.popularity = 0;
-	enrolledStudents = new ArrayList<>();
+	this.enrolledStudents = new ArrayList<Student>();
     }
 
     public int getID() {
@@ -66,7 +66,11 @@ public class Classes implements Comparable<Classes>{
     }
     
     public String toString() {
-	return id + ": pop: " + popularity + ", prof: " + professor + ", room:" + room + ",time: " + timeslot;
+	String s = id + "\t" + room + "\t" + professor + "\t" + timeslot + "\t";
+	for(int i = 0; i < enrolledStudents.size(); i++) {
+	    s = s +  enrolledStudents.get(i) + " ";
+	}
+	return s;
     }
     
     public int compareTo(Classes other) {

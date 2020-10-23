@@ -49,7 +49,7 @@ public class Room implements Comparable<Room>{
     }
     
     public String toString() {
-	return id + ": " + size; 
+	return id + "";
     }
     
     public int compareTo(Room other) {

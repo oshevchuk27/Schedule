@@ -37,11 +37,7 @@ public class Student {
     
     
     public String toString() {
-	String s =  id + "\n";
-	s += enrolledClasses;
-	//for(int i = 0; i < 4; i++) {
-	//    s += prefList[i] + " ";
-	//}
+	String s =  id + "";
 	return s;
     }
     
