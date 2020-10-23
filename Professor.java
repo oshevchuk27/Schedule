@@ -14,12 +14,16 @@ public class Professor {
     }
     public void setAvailableTimes(int[] availableTimes) {
 	this.availableTimes = availableTimes;
-    }
+    }	
 
     public int[] getAvailableTimes() {
 	return availableTimes;
     }
 
+    public int getID() {
+	return id;
+    }
+    
     public void printAvailableTimes() {
 	System.out.println("HERE");
 	for(int i = 1; i < availableTimes.length; i++) {
@@ -33,8 +37,12 @@ public class Professor {
 	
 	//System.out.println("id " +id);
 	//for(int i = 1; i < availableTimes.length; i++) {
-	//   System.out.println(availableTimes[i]);
+	//System.out.println(availableTimes[i]);
 	//}
+	if(id==2) {
+	    //System.out.println("remove");
+	    //printAvailableTimes();
+	}
 	availableTimes[time] = -1;
     }
 
@@ -44,6 +52,9 @@ public class Professor {
 	//System.out.println("id " + id);
 	//System.out.println("time " + time);
 	//System.out.println(availableTimes[time]);
+	if(id==2) {
+	    //printAvailableTimes();
+	}
 	return availableTimes[time] != -1;
     }
     

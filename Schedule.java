@@ -20,7 +20,7 @@ public class Schedule {
 	setTimes();
 	makeSchedule();
 	for(int i = 0; i < classes.length; i++) {
-	    //System.out.println(classes[i]);
+	    System.out.println(classes[i]);
 	}
 	for(int i = 0; i< professors.length;i++) {
 	    // professors[i].printAvailableTimes();
@@ -84,7 +84,12 @@ public class Schedule {
 	    constraints.nextInt();
 	    professor = constraints.nextInt();
 	    c = new Classes(i);
-	    p = new Professor(professor,numTimeslots);
+	    //if professor has not yet been processed
+	    if(professors[professor] == null) {
+		p = new Professor(professor,numTimeslots);
+	    } else {
+		p = professors[professor];
+	    }
 	    c.setProfessor(p);
 	    classes[i] = c;
 	    professors[professor] = p;
@@ -140,9 +145,9 @@ public class Schedule {
 	    //System.out.println(ts.length);
 	    for(int i = 0; i <= numTimeslots; i++) {
 		timeslots[i] = i;
-		ts[i] = i;
+		//ts[i] = i;
 	    }
-	    //professor.setAvailableTimes(timeslots);
+	    professor.setAvailableTimes(timeslots);
 	}
 	/*for(int i = 1; i < professors.length; i++) {
 	    System.out.println(i);
@@ -178,6 +183,9 @@ public class Schedule {
 	    //check if professor is available at this time
 	    
 	    //System.out.println("c " + c);
+	    if(p.getID()==2) {
+		//p.printAvailableTimes();
+	    }
 	    available = p.available(t);
 	    //System.out.println(available);
 	    //System.out.println("class2 " + c);
