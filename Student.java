@@ -9,6 +9,7 @@ public class Student {
     public Student(int id, Classes[] prefList) {
 	this.id = id;
 	this.prefList = prefList;
+	this.enrolledClasses = new ArrayList<Classes>();
     }
     
     public Classes[] getPrefList() {
@@ -18,9 +19,26 @@ public class Student {
     public void enroll(Classes c) {
 	enrolledClasses.add(c);
     }
+
+    public ArrayList<Classes> getEnrolledClasses() {
+	return enrolledClasses;
+    }
+
+    public boolean available(int time) {
+	Classes c;
+	for(int i = 0; i < enrolledClasses.size(); i++) {
+	    c = enrolledClasses.get(i);
+	    if(c.getTime() == time) {
+		return false;
+	    }
+	}
+	return true;
+    }
+    
     
     public String toString() {
-	String s =  id + "";
+	String s =  id + "\n";
+	s += enrolledClasses;
 	//for(int i = 0; i < 4; i++) {
 	//    s += prefList[i] + " ";
 	//}

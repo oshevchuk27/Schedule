@@ -59,7 +59,7 @@ public class Professor {
     }
     
     public String toString() {
-	String s = id + ": ";
+	String s = id + "";
 	//s += availableTimes;
 	//for(int i = 1; i < availableTimes.length; i++) {
 	//    s += availableTimes[i] + " ";

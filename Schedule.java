@@ -25,6 +25,11 @@ public class Schedule {
 	for(int i = 0; i< professors.length;i++) {
 	    // professors[i].printAvailableTimes();
 	}
+	scheduleStudents();
+	for(int i = 0; i < students.length; i ++) {
+	    System.out.println(students[i]);
+	}
+	writeScheduleFile();
 	
 	
     }
@@ -253,14 +258,33 @@ public class Schedule {
 		if(!success) {
 		    nextRoom++;
 		    r = rooms[nextRoom];
-		//  roomID = r.getID();
-		    //System.out.println(roomID+1);
-		//  r = rooms[roomID + 1];
-		    //System.out.println("here");
 		  }
-		    //System.out.println("room " + r);
-		    //System.out.println("index " + 
 	    }
 	}
+    }
+    public static void scheduleStudents() {
+	Student s;
+	Classes[] prefList;
+	Classes c;
+	for(int i = 1; i < students.length; i++) {
+	    s = students[i];
+	    prefList = s.getPrefList();
+	    for(int j = 0; j<prefList.length; j++) {
+		c = prefList[j];
+		if(!c.isFull()) {
+		    if(s.available(c.getTime())) {
+			s.enroll(c);
+			c.enrollStudent(s);
+		    }
+		}
+	    }
+	}
+    }
+
+    public static void writeScheduleFile() {
+	System.out.println("Course \t Room \t Teacher \t Time \t Students";
+	/*PrintWriter writer = new PrintWriter("schedule.txt");
+	writer.println("Course \t ");
+	writer.close();*/
     }
 }

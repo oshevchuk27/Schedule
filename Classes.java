@@ -42,9 +42,23 @@ public class Classes implements Comparable<Classes>{
     public void setRoom(Room room) {
 	this.room = room;
     }
+
+    public int getTime() {
+	return timeslot;
+    }
+
+    public Room getRoom() {
+	return room;
+    }
     
     public void enrollStudent(Student s) {
 	enrolledStudents.add(s);
+    }
+
+    public boolean isFull() {
+	int roomSize = this.getRoom().getSize();
+	int numStudentsEnrolled = enrolledStudents.size();
+	return roomSize == numStudentsEnrolled;
     }
 
     public ArrayList<Student> getEnrolledStudents() {
