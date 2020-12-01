@@ -2,10 +2,10 @@ import java.util.*;
 
 public class Professor {
 
-    private int id;
+    private String id;
     private int[] availableTimes;
 
-    public Professor(int id, int numTimes) {
+    public Professor(String id, int numTimes) {
 	this.id = id;
 	this.availableTimes = new int[numTimes+1];
     }
@@ -18,7 +18,7 @@ public class Professor {
 	return availableTimes;
     }
 
-    public int getID() {
+    public String getID() {
 	return id;
     }
     

@@ -2,11 +2,11 @@ import java.util.*;
 
 public class Student {
 
-    private int id;
+    private String id;
     private Classes[] prefList;
     private ArrayList<Classes> enrolledClasses;
     
-    public Student(int id, Classes[] prefList) {
+    public Student(String id, Classes[] prefList) {
 	this.id = id;
 	this.prefList = prefList;
 	this.enrolledClasses = new ArrayList<Classes>();

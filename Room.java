@@ -1,12 +1,12 @@
 public class Room implements Comparable<Room>{
 
-    private int id;
+    private String id;
     private int size;
     private int[] availableTimes;
     private int numRemoved;
     private boolean unavailable;
     
-    public Room(int id, int size)  {
+    public Room(String id, int size)  {
 	this.id = id;
 	this.size = size;
 	this.numRemoved = 0;
@@ -16,7 +16,7 @@ public class Room implements Comparable<Room>{
 	return size;
     }
 
-    public int getID() {
+    public String getID() {
 	return id;
     }
     

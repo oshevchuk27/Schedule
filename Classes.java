@@ -2,20 +2,20 @@ import java.util.*;
 
 public class Classes implements Comparable<Classes>{
 
-    private int id;
+    private String id;
     private int popularity;
     private Professor professor;
     private ArrayList<Student> enrolledStudents;
     private int timeslot;
     private Room room;
     
-    public Classes(int id) {
+    public Classes(String id) {
 	this.id = id;
 	this.popularity = 0;
 	this.enrolledStudents = new ArrayList<Student>();
     }
 
-    public int getID() {
+    public String getID() {
 	return id;
     }
     
