@@ -175,7 +175,7 @@ def write_class_times_to_file(list_of_dicts, f):
   f.write("Class Times\t" + str(len(class_times)) + "\n")
   i = 1
   for (start, end, days) in class_times:
-    #f.write(str(i) + "\t" + start + " " + end + " " + days + "\n")
+    f.write(str(i) + "\t" + start + " " + end + " " + days + "\n")
     i = i + 1
 
 def write_rooms_to_file(list_of_dicts, f):

@@ -59,11 +59,21 @@ public class Schedule {
 	numTimeslots = constraints.nextInt();
 	System.out.println("timeslots: " + numTimeslots);
 
+	int ts = removeOverlaps(numTimeslots, constraints);
+
+	//ts equals -1 when timeslot info is not in constraints file (like for basic data)
+	if(ts != -1) {
+	    numTimeslots = ts;
+	}
+	
+	System.out.println("timeslots: " + numTimeslots);
+
 	while(!constraints.hasNextInt()) {
 	    constraints.next();
 	}
 	numRooms = constraints.nextInt();
 	System.out.println("rooms: " + numRooms);
+
 	int roomIndex = 1;
 	rooms = new Room[numRooms+1];
 	rooms[0] = new Room("",0);
@@ -131,6 +141,95 @@ public class Schedule {
 	}
 	
 	constraints.close();
+    }
+
+    //removes overlapping timeslots and returns new number of timeslots
+    public static int removeOverlaps(int numTimeslots, Scanner constraints) {
+	String start;
+	String end;
+	int startHrs;
+	int startMin;
+	int endHrs;
+	int endMin;
+	Date startTime;
+	Date endTime;
+	String days;
+	Timeslot timeslot;
+	
+	constraints.nextLine();
+	String checkLine = constraints.next();
+	System.out.println(checkLine);
+
+	//if constraints file doesn't have timeslot info, return
+	if(checkLine.contains("Rooms")) {
+	    return -1;
+	}
+
+	Timeslot[] timeslots = new Timeslot[numTimeslots];
+	String line;
+	
+	for(int i = 0; i < numTimeslots; i++) {
+	    line = constraints.nextLine();
+	    String[] stringArray = line.split("\\s+");
+	    
+	    start = stringArray[1];
+	    String[] startTimes = start.split(":");
+	    startHrs = Integer.parseInt(startTimes[0]);
+	    startMin = Integer.parseInt(startTimes[1]);
+
+	    //convert to 24 hour time
+	    if(stringArray[2].equals("PM") && startHrs < 12) {
+		startHrs = startHrs + 12;
+	    }
+	    
+	    end = stringArray[3];
+	    String[] endTimes = end.split(":");
+	    endHrs = Integer.parseInt(endTimes[0]);
+	    endMin = Integer.parseInt(endTimes[1]);
+
+	    //convert to 24 hour time
+	    if(stringArray[4].equals("PM") && endHrs < 12) {
+		endHrs = endHrs + 12;
+	    }
+	    startTime = new Date(0, 0, 0, startHrs, startMin, 0);
+	    endTime = new Date(0, 0, 0, endHrs, endMin, 0);
+	    days = stringArray[5];
+		
+	    //replace Thursday abbreviation to make comparison easier
+	    if(days.contains("TH")) {
+		days = days.replace("TH", "R");
+	    }
+
+	    timeslot = new Timeslot(startTime, endTime, days);
+	    timeslots[i] = timeslot;
+	}
+
+	Timeslot t1;
+	Timeslot t2;
+	int removed = 0;
+	
+	for(int i = 0; i < timeslots.length; i++) {
+	    if(timeslots[i] == null) {
+		continue;
+	    }
+	    
+	    for(int j = 0; j < timeslots.length; j++) {
+		if(i==j) {
+		    continue;
+		}
+		t1 = timeslots[i];
+		t2 = timeslots[j];
+
+		if(t2 != null) {
+		    //remove t2 if it overlaps with t1
+		    if(t1.isOverlapping(t2)) {
+			timeslots[j] = null;
+			removed++;
+		    }
+		}
+	    }
+	}
+	return numTimeslots-removed;
     }
 
     public static void readPreferences(String filename) throws FileNotFoundException {
