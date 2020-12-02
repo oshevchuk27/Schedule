@@ -23,22 +23,22 @@ public class Schedule {
     public static void main(String[] args) throws FileNotFoundException {
 	try {
 	    long startTime = System.nanoTime();
-	    
+
 	    //read file names from command line
 	    String constraintsFile = args[0];
 	    String prefsFile = args[1];
 	    String scheduleFile = args[2];
-	    
+
 	    readConstraints(constraintsFile);
 	    readPreferences(prefsFile);
 	    setTimes();
 	    makeSchedule();
 	    scheduleStudents();
 	    writeScheduleFile(scheduleFile);
-	    
+
 	    long endTime = System.nanoTime();
 	    double duration = (endTime - startTime)/ 1e6;
-	    
+
 	    System.out.println(duration);
 	}
 	catch(IndexOutOfBoundsException n) {
@@ -65,7 +65,7 @@ public class Schedule {
 	if(ts != -1) {
 	    numTimeslots = ts;
 	}
-	
+
 	System.out.println("timeslots: " + numTimeslots);
 
 	while(!constraints.hasNextInt()) {
@@ -115,7 +115,7 @@ public class Schedule {
 	int profIndex = 1;
 	int classIndex = 1;
 	int pIndex;
-   
+
 
 	//set professors to classes
 	for(int i = 1; i <=  numClasses; i++) {
@@ -129,7 +129,7 @@ public class Schedule {
 		professorHash.put(profID, profIndex);
 		professors[profIndex] = p;
 		profIndex++;
-	  
+
 	    } else {
 		pIndex = professorHash.get(profID);
 		p = professors[pIndex];
@@ -139,7 +139,7 @@ public class Schedule {
 	    classes[classIndex] = c;
 	    classIndex++;
 	}
-	
+
 	constraints.close();
     }
 
@@ -155,7 +155,7 @@ public class Schedule {
 	Date endTime;
 	String days;
 	Timeslot timeslot;
-	
+
 	constraints.nextLine();
 	String checkLine = constraints.next();
 	System.out.println(checkLine);
@@ -167,11 +167,11 @@ public class Schedule {
 
 	Timeslot[] timeslots = new Timeslot[numTimeslots];
 	String line;
-	
+
 	for(int i = 0; i < numTimeslots; i++) {
 	    line = constraints.nextLine();
 	    String[] stringArray = line.split("\\s+");
-	    
+
 	    start = stringArray[1];
 	    String[] startTimes = start.split(":");
 	    startHrs = Integer.parseInt(startTimes[0]);
@@ -181,7 +181,7 @@ public class Schedule {
 	    if(stringArray[2].equals("PM") && startHrs < 12) {
 		startHrs = startHrs + 12;
 	    }
-	    
+
 	    end = stringArray[3];
 	    String[] endTimes = end.split(":");
 	    endHrs = Integer.parseInt(endTimes[0]);
@@ -194,7 +194,7 @@ public class Schedule {
 	    startTime = new Date(0, 0, 0, startHrs, startMin, 0);
 	    endTime = new Date(0, 0, 0, endHrs, endMin, 0);
 	    days = stringArray[5];
-		
+
 	    //replace Thursday abbreviation to make comparison easier
 	    if(days.contains("TH")) {
 		days = days.replace("TH", "R");
@@ -207,12 +207,12 @@ public class Schedule {
 	Timeslot t1;
 	Timeslot t2;
 	int removed = 0;
-	
+
 	for(int i = 0; i < timeslots.length; i++) {
 	    if(timeslots[i] == null) {
 		continue;
 	    }
-	    
+
 	    for(int j = 0; j < timeslots.length; j++) {
 		if(i==j) {
 		    continue;
@@ -248,19 +248,20 @@ public class Schedule {
 	int classIndex;
 	int studentIndex = 1;
 	String line;
+  long maxPrefScore = 0;
 	preferences.nextLine();
 	for(int i = 1; i <= numStudents; i++) {
 
 	    line = preferences.nextLine();
-	    
+
 	    //splits line by spaces
 	    String[] stringArray = line.split("\\s+");
 	    Classes[] prefList = new Classes[stringArray.length-1];
-	    
+
 	    studentID = stringArray[0];
-	    
+
 	    for(int j = 1; j < stringArray.length; j++) {
-		
+
 		classID = stringArray[j];
 
 		//count popularity of classes
@@ -276,10 +277,12 @@ public class Schedule {
 	    studentHash.put(studentID, studentIndex);
 	    students[studentIndex] = new Student(studentID, prefList);
 	    studentIndex++;
+      maxPrefScore += prefList.length;
 	}
 
 	//sort classes most to least popular
 	Arrays.sort(classes, Collections.reverseOrder());
+  System.out.println("Max preference score: " + maxPrefScore);
     }
 
     //set rooms' and professors' available timeslots to all timeslots
@@ -294,13 +297,13 @@ public class Schedule {
 	    }
 	    room.setAvailableTimes(timeslots);
 	}
-	
+
 	for(int j = 1; j<professors.length;j++) {
-	    
+
 	    Professor professor = professors[j];
-	    
+
 	    if(professor != null) {
-		
+
 		timeslots = new int[numTimeslots + 1];
 		int[] ts = professor.getAvailableTimes();
 		for(int i = 0; i <= numTimeslots; i++) {
@@ -329,7 +332,7 @@ public class Schedule {
 		continue;
 	    }
 
-	    
+
 	    //check if professor is available during this time
 	    available = p.available(t);
 
