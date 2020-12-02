@@ -4,6 +4,7 @@ import java.io.*;
 public class Schedule {
 
     static int currentLargestRoom = 0;
+    static int preference_value = 0;
 
     static int numClasses;
     static int numTimeslots;
@@ -31,6 +32,7 @@ public class Schedule {
 
 	    readConstraints(constraintsFile);
 	    readPreferences(prefsFile);
+
 	    setTimes();
 	    makeSchedule();
 	    scheduleStudents();
@@ -39,7 +41,8 @@ public class Schedule {
 	    long endTime = System.nanoTime();
 	    double duration = (endTime - startTime)/ 1e6;
 
-	    System.out.println(duration);
+      System.out.println("Student Preference Value: " + preference_value);
+	    System.out.println("The time taken to run the algorithm is " + duration + " milliseconds.");
 	}
 	catch(IndexOutOfBoundsException n) {
 	    System.out.println("Usage:");
@@ -282,7 +285,7 @@ public class Schedule {
 
 	//sort classes most to least popular
 	Arrays.sort(classes, Collections.reverseOrder());
-  System.out.println("Max preference score: " + maxPrefScore);
+  System.out.println("Best Case Student Value: " + maxPrefScore);
     }
 
     //set rooms' and professors' available timeslots to all timeslots
@@ -406,6 +409,7 @@ public class Schedule {
 			if(s.available(c.getTime())) {
 			    s.enroll(c);
 			    c.enrollStudent(s);
+          preference_value ++;
 			}
 		    }
 		}
