@@ -5,6 +5,7 @@ public class Schedule {
 
     static int currentLargestRoom = 0;
     static int preference_value = 0;
+    static int max_value = 0;
 
     static int numClasses;
     static int numTimeslots;
@@ -42,6 +43,7 @@ public class Schedule {
 	    double duration = (endTime - startTime)/ 1e6;
 
       System.out.println("Student Preference Value: " + preference_value);
+      System.out.println("Base Case Student Value: " + max_value);
 	    System.out.println("The time taken to run the algorithm is " + duration + " milliseconds.");
 	}
 	catch(IndexOutOfBoundsException n) {
@@ -60,7 +62,7 @@ public class Schedule {
 	    constraints.next();
 	}
 	numTimeslots = constraints.nextInt();
-	System.out.println("timeslots: " + numTimeslots);
+//	System.out.println("timeslots: " + numTimeslots);
 
 	int ts = removeOverlaps(numTimeslots, constraints);
 
@@ -69,13 +71,13 @@ public class Schedule {
 	    numTimeslots = ts;
 	}
 
-	System.out.println("timeslots: " + numTimeslots);
+	//System.out.println("timeslots: " + numTimeslots);
 
 	while(!constraints.hasNextInt()) {
 	    constraints.next();
 	}
 	numRooms = constraints.nextInt();
-	System.out.println("rooms: " + numRooms);
+	//System.out.println("rooms: " + numRooms);
 
 	int roomIndex = 1;
 	rooms = new Room[numRooms+1];
@@ -100,14 +102,14 @@ public class Schedule {
 	numClasses = constraints.nextInt();
 	classes = new Classes[numClasses+1];
 	classes[0] = new Classes("");
-	System.out.println("classes: " + numClasses);
+	//System.out.println("classes: " + numClasses);
 
 	while(!constraints.hasNextInt()) {
 	    constraints.next();
 	}
 	int numProfessors = constraints.nextInt();
 
-	System.out.println("professors: " + numProfessors);
+	//System.out.println("professors: " + numProfessors);
 	professors = new Professor[numProfessors + 1];
 	professors[0] = new Professor("",numTimeslots);
 
@@ -161,7 +163,7 @@ public class Schedule {
 
 	constraints.nextLine();
 	String checkLine = constraints.next();
-	System.out.println(checkLine);
+//	System.out.println(checkLine);
 
 	//if constraints file doesn't have timeslot info, return
 	if(checkLine.contains("Rooms")) {
@@ -241,7 +243,7 @@ public class Schedule {
 	    preferences.next();
 	}
 	int numStudents = preferences.nextInt();
-	System.out.println("students: " + numStudents);
+//	System.out.println("students: " + numStudents);
 	students = new Student[numStudents + 1];
 	students[0] = new Student("",null);
 
@@ -280,12 +282,10 @@ public class Schedule {
 	    studentHash.put(studentID, studentIndex);
 	    students[studentIndex] = new Student(studentID, prefList);
 	    studentIndex++;
-      maxPrefScore += prefList.length;
 	}
 
 	//sort classes most to least popular
 	Arrays.sort(classes, Collections.reverseOrder());
-  System.out.println("Best Case Student Value: " + maxPrefScore);
     }
 
     //set rooms' and professors' available timeslots to all timeslots
@@ -398,7 +398,7 @@ public class Schedule {
 
 	    s = students[i];
 	    prefList = s.getPrefList();
-
+      max_value+= prefList.length;
 	    //traverse student's preference list
 	    for(int j = 0; j<prefList.length; j++) {
 
