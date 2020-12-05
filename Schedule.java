@@ -44,7 +44,11 @@ public class Schedule {
 
       System.out.println("Student Preference Value: " + preference_value);
       System.out.println("Base Case Student Value: " + max_value);
-	    System.out.println("The time taken to run the algorithm is " + duration + " milliseconds.");
+      System.out.print("Student Preference Percentage: ");
+      System.out.printf("%.2f", 100*(preference_value / (double)max_value));
+      System.out.println("%");
+      //System.out.println("Percentage: " + 100*(preference_value / (double)max_value) + "%");
+      System.out.println("The time taken to run the algorithm is " + duration + " milliseconds.");
 	}
 	catch(IndexOutOfBoundsException n) {
 	    System.out.println("Usage:");
@@ -214,12 +218,11 @@ public class Schedule {
 	int removed = 0;
 
 	for(int i = 0; i < timeslots.length; i++) {
-	    if(timeslots[i] == null) {
-		continue;
-	    }
-
 	    for(int j = 0; j < timeslots.length; j++) {
 		if(i==j) {
+		    continue;
+		}
+		if(timeslots[i] == null) {
 		    continue;
 		}
 		t1 = timeslots[i];
@@ -228,7 +231,14 @@ public class Schedule {
 		if(t2 != null) {
 		    //remove t2 if it overlaps with t1
 		    if(t1.isOverlapping(t2)) {
-			timeslots[j] = null;
+			
+			//remove shorter of two timeslots
+			if(t1.isShorter(t2)) {
+			    timeslots[i] = null;
+			}
+			else {
+			    timeslots[j] = null;
+			}
 			removed++;
 		    }
 		}

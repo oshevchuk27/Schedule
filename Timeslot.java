@@ -42,6 +42,16 @@ public class Timeslot {
 	}
 	return false;
     }
+
+    public boolean isShorter(Timeslot other) {
+	long duration1 = endTime.getTime() - startTime.getTime();
+	long duration2 = other.getEndTime().getTime() - other.getStartTime().getTime();
+	if(duration1 < duration2) {
+	    return true;
+	} else {
+	    return false;
+	}
+    }
     
     public String toString() {
 	String s = "Start: " + startTime + "\t" + "End: " + endTime + "\t" + "Days: " + days;
