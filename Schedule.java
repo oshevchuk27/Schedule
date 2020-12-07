@@ -43,7 +43,7 @@ public class Schedule {
 	    double duration = (endTime - startTime)/ 1e6;
 
       System.out.println("Student Preference Value: " + preference_value);
-      System.out.println("Base Case Student Value: " + max_value);
+      System.out.println("Best Case Student Value: " + max_value);
       System.out.print("Student Preference Percentage: ");
       System.out.printf("%.2f", 100*(preference_value / (double)max_value));
       System.out.println("%");
@@ -231,7 +231,7 @@ public class Schedule {
 		if(t2 != null) {
 		    //remove t2 if it overlaps with t1
 		    if(t1.isOverlapping(t2)) {
-			
+
 			//remove shorter of two timeslots
 			if(t1.isShorter(t2)) {
 			    timeslots[i] = null;
