@@ -1,7 +1,7 @@
 README.txt
 
-Group Project: The Registrar's Problem
-Collaborators: Olga Shevchuk - Sarah Coufal - Nitisha Bhandari
+<div> Group Project: The Registrar's Problem </div>
+<div> Collaborators: Olga Shevchuk - Sarah Coufal - Nitisha Bhandari </div>
 
 
 Description and Analysis:
