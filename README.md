@@ -29,7 +29,7 @@ ________________
 
 How to run:
 
-<div> $java Schedule <constraints file> <prefs file> <schedule file> </div>
+$java Schedule /<constraints file /> <prefs file> <schedule file>
   
 ________________  
  
