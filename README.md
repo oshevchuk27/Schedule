@@ -12,7 +12,7 @@ __________________
 
 
 Main src files:
-________________
+
 - Classes.java
 - Professor.java
 - Room.java
