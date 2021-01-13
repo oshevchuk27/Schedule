@@ -1,4 +1,3 @@
-README.txt
 
 <div> Group Project: The Registrar's Problem </div>
 <div> Collaborators: Olga Shevchuk - Sarah Coufal - Nitisha Bhandari </div>
@@ -30,7 +29,7 @@ ________________
 
 How to run:
 
-$java Schedule <constraints file> <prefs file> <schedule file>
+<div> $java Schedule <constraints file> <prefs file> <schedule file> </div>
   
 ________________  
  
