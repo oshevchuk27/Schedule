@@ -2,6 +2,7 @@
 <div> Group Project: The Registrar's Problem </div>
 <div> Collaborators: Olga Shevchuk - Sarah Coufal - Nitisha Bhandari </div>
 
+________________
 
 Description and Analysis:
 ________________
